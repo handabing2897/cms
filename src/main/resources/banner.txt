@@ -1,0 +1,11 @@
+${AnsiColor.BRIGHT_GREEN}
+                               .__     .__
+  ______ __ __   ____    ______|  |__  |__|  ____    ____
+ /  ___/|  |  \ /    \  /  ___/|  |  \ |  | /    \ _/ __ \
+ \___ \ |  |  /|   |  \ \___ \ |   Y  \|  ||   |  \\  ___/
+/____  >|____/ |___|  //____  >|___|  /|__||___|  / \___  >
+     \/             \/      \/      \/          \/      \/
+
+${AnsiColor.BRIGHT_RED}###### sunshine® Developed by dabing @v1.0
+${AnsiColor.BRIGHT_RED}###### Spring Boot Version: ${spring-boot.version}
+${AnsiColor.BRIGHT_BLACK}

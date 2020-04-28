@@ -1,0 +1,103 @@
+
+server:
+  port: 18090
+spring:
+  application:
+    name: CMS
+    simple: SUNSHINE
+  mvc:
+    static-path-pattern: /static/** # 静态地址映射
+  servlet:
+      multipart: # 文件上传限制
+        max-file-size: 50MB
+        max-request-size: 10MB
+  resources:
+    static-locations: classpath:/static/ # 静态文件目录
+  datasource:
+    druid: #Druid数据源配置
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/cms?useUnicode=true&characterEncoding=utf-8
+      username: root
+      password: 12345678
+      initial-size: 5 # 初始化时建立物理连接的个数。初始化发生在显示调用init方法，或者第一次getConnection时
+      max-active: 20 # 最大连接池数量 Default:8
+      max-wait: 60000 # 获取连接时最大等待时间
+      min-idle: 5 # 最小连接池数量
+      time-between-eviction-runs-millis: 60000 # 1.Destroy线程会检测连接的间隔时间 2.test-while-idle的判断依据
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 # 用来检测连接是否有效的sql，要求是一个查询语句
+      max-open-prepared-statements: 20 # 要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true
+      remove-abandoned: true # 连接使用超过时间限制是否回收
+      remove-abandoned-timeout-millis: 60000 # 超过时间限制时间（s）,Default:300s
+      test-on-borrow: false # 申请连接时执行validationQuery检测连接是否有效,会降低性能
+      test-on-return: false # 归还连接时执行validationQuery检测连接是否有效,会降低性能
+      test-while-idle: true # 申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效
+      filter: # 自定义StatFilter配置
+        stat:
+          enabled: false
+          db-type: mysql
+          log-slow-sql: true
+          slow-sql-millis: 2000
+      stat-view-servlet: # Druid监控配置
+        enabled: false
+        url-pattern: /druid/*
+        reset-enable: true
+        login-username: admin
+        login-password: 1ead34fjf48adsjvnm323
+      web-stat-filter:
+        enabled: false
+        url-pattern: /*
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,*.woff,/druid/*"
+      aop-patterns: com.sunshine.cms.service.* # Spring监控AOP切入点
+  aop:
+    proxy-target-class: true # 开启AOP，使用CGLIB代理
+
+#  redis: # spring redis
+#    host: dev
+#    port: 6379
+#    password:  # 密码
+#    timeout: 5s
+#    lettuce: # 使用lettuce或者jedis
+#      pool:
+#        max-idle: 50
+#        min-idle: 10
+#        max-active: 10
+  rabbitmq: # rabbitmq
+    host: dev # 服务器地址
+    port: 5672
+    username: rabbitmq
+    password: 12345678
+    virtual-host: /rmq # 虚拟Host,需要预先创建 '/hostname'并设置权限
+    requested-heartbeat: 10s
+    publisher-confirms: true # 开启发送确认
+    publisher-returns: true # 开启发送失败退回
+    listener:
+      simple:
+        acknowledge-mode: manual # 开启ACK
+        concurrency: 10 # 消费者数量
+        prefetch: 50 # 每个消费者获取最大投递数量
+        retry: # 是否支持重试
+          enabled: true
+          initial-interval: 10s
+          max-attempts: 3
+
+#  quartz: # quartz配置
+#    job-store-type: jdbc # jdbc | memory
+#    properties: # Quartz属性配置
+#      org:
+#        quartz:
+#          scheduler:
+#            instanceName: DefaultQuartzScheduler
+#            instanceId: AUTO
+#          jobStore: # jdbc支持(需先导入SQL)
+#            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+#            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+#            tablePrefix: qz_
+#            isClustered: true
+#            clusterCheckinInterval: 10000
+#            useProperties: false
+#          threadPool:
+#            class: org.quartz.simpl.SimpleThreadPool
+#            threadCount: 10 # 并发数
+#            threadPriority: 5 # 优先级
+#            threadsInheritContextClassLoaderOfInitializingThread: true
